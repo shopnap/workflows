@@ -9,6 +9,9 @@ on:
       GOMODULE_PRIVATE_KEY:
         required: false
         description: "SSH key that has permission to access private Go modules."
+      CODECOV_TOKEN:
+        required: false
+        description: "Codecov token."
 
 jobs:
   build:
@@ -73,3 +76,32 @@ jobs:
         with:
           version: v1.43.0
           args: --timeout=10m
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: "Checkout code."
+        uses: actions/checkout@v2
+
+      - name: "Setup Go"
+        uses: shopnap/setup-go@main
+        with:
+          go-version: ${{ secrets.GOLANG_VERSION }}
+          private-key: ${{ secrets.GOMODULE_PRIVATE_KEY }}
+
+      - name: "Download dependencies."
+        run: make dependencies
+
+      - name: "Coverage"
+        run: make coverage
+
+      - name: "Upload coverage report."
+        if: ${{ secrets.CODECOV_TOKEN != '' }}
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.out
+          fail_ci_if_error: true
+          verbose: true
