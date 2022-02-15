@@ -98,9 +98,12 @@ jobs:
         run: make coverage
 
       - name: "Upload coverage report."
+        if: ${{ env.CODECOV_TOKEN != '' }}
         uses: codecov/codecov-action@v2
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ env.CODECOV_TOKEN }}
           file: ./coverage.out
           fail_ci_if_error: true
           verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
