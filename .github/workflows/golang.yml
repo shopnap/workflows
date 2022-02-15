@@ -1,0 +1,75 @@
+name: Golang
+
+on:
+  workflow_call:
+    secrets:
+      GOLANG_VERSION:
+        required: false
+        description: "Golang version to use."
+      GOMODULE_PRIVATE_KEY:
+        required: true
+        description: "SSH key that has permission to access private Go modules."
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: "Checkout code."
+        uses: actions/checkout@v2
+
+      - name: "Setup Go"
+        uses: shopnap/setup-go@main
+        with:
+          go-version: ${{ secrets.GOLANG_VERSION }}
+          private-key: ${{ secrets.GOMODULE_PRIVATE_KEY }}
+
+      - name: "Download dependencies."
+        run: make dependencies
+
+      - name: "Build"
+        run: make build
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: "Checkout code."
+        uses: actions/checkout@v2
+
+      - name: "Setup Go"
+        uses: shopnap/setup-go@main
+        with:
+          go-version: ${{ secrets.GOLANG_VERSION }}
+          private-key: ${{ secrets.GOMODULE_PRIVATE_KEY }}
+
+      - name: "Download dependencies."
+        run: make dependencies
+
+      - name: "Test"
+        run: make test
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: "Checkout code."
+        uses: actions/checkout@v2
+
+      - name: "Setup Go"
+        uses: shopnap/setup-go@main
+        with:
+          go-version: ${{ secrets.GOLANG_VERSION }}
+          private-key: ${{ secrets.GOMODULE_PRIVATE_KEY }}
+
+      - name: "Download dependencies."
+        run: make dependencies
+
+      - name: "Lint (Golang)"
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.43.0
+          args: --timeout=10m
