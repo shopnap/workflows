@@ -7,7 +7,7 @@ on:
         required: false
         description: "Golang version to use."
       GOMODULE_PRIVATE_KEY:
-        required: true
+        required: false
         description: "SSH key that has permission to access private Go modules."
 
 jobs:
