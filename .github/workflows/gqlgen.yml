@@ -6,6 +6,9 @@ on:
       GOLANG_VERSION:
         required: true
         description: "Golang version to use."
+      GOLANGCI_LINT_VERSION:
+        required: true
+        description: "GolangCI-Lint version to use."
       NODE_VERSION:
         required: true
         description: "NodeJS version to use."
@@ -38,7 +41,9 @@ jobs:
           check-latest: true
 
       - name: "Install linters"
-        run: npm install --global graphql-schema-linter prettier
+        run: |
+          npm install --global graphql-schema-linter prettier
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin ${{ secrets.GOLANGCI_LINT_VERSION }}
 
       - name: "Lint (GraphQL)"
         run: make lint-graphql

@@ -6,6 +6,9 @@ on:
       GOLANG_VERSION:
         required: true
         description: "Golang version to use."
+      GOLANGCI_LINT_VERSION:
+        required: true
+        description: "GolangCI-Lint version to use."
       GOMODULE_PRIVATE_KEY:
         required: false
         description: "SSH key that has permission to access private Go modules."
@@ -74,7 +77,7 @@ jobs:
       - name: "Lint (Golang)"
         uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.43.0
+          version: ${{ secrets.GOLANGCI_LINT_VERSION }}
           args: --timeout=10m
 
   coverage:
