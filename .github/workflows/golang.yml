@@ -4,7 +4,7 @@ on:
   workflow_call:
     secrets:
       GOLANG_VERSION:
-        required: false
+        required: true
         description: "Golang version to use."
       GOMODULE_PRIVATE_KEY:
         required: false
