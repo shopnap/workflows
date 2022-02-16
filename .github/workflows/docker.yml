@@ -5,7 +5,7 @@ on:
     secrets:
       GOLANG_VERSION:
         required: true
-        description: "Golang version to use."
+        description: "Golang version to use. (ex: 1.17.5)"
       GOMODULE_PRIVATE_KEY:
         required: false
         description: "SSH key that has permission to access private Go modules."

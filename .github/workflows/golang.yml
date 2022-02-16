@@ -5,10 +5,10 @@ on:
     secrets:
       GOLANG_VERSION:
         required: true
-        description: "Golang version to use."
+        description: "Golang version to use. (ex: 1.17.5)"
       GOLANGCI_LINT_VERSION:
         required: true
-        description: "GolangCI-Lint version to use."
+        description: "GolangCI-Lint version to use. (ex: v1.43.0)"
       GOMODULE_PRIVATE_KEY:
         required: false
         description: "SSH key that has permission to access private Go modules."
