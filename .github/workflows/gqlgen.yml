@@ -1,0 +1,48 @@
+name: GQLGen
+
+on:
+  workflow_call:
+    secrets:
+      GOLANG_VERSION:
+        required: true
+        description: "Golang version to use."
+      NODE_VERSION:
+        required: true
+        description: "NodeJS version to use."
+      GOMODULE_PRIVATE_KEY:
+        required: false
+        description: "SSH key that has permission to access private Go modules."
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: "Checkout code."
+        uses: actions/checkout@v2
+
+      - name: "Setup Go"
+        uses: shopnap/setup-go@main
+        with:
+          go-version: ${{ secrets.GOLANG_VERSION }}
+          private-key: ${{ secrets.GOMODULE_PRIVATE_KEY }}
+
+      - name: "Download dependencies."
+        run: make dependencies
+
+      - name: "Setup node"
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ secrets.NODEJS_VERSION }}
+          check-latest: true
+          cache: "npm"
+
+      - name: "Install linters"
+        run: npm install --global graphql-schema-linter prettier
+
+      - name: "Lint (GraphQL)"
+        run: make lint-graphql
+
+      - name: "Lint (Code generation)"
+        run: make lint-generated-code
