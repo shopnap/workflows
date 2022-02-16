@@ -36,7 +36,6 @@ jobs:
         with:
           node-version: ${{ secrets.NODEJS_VERSION }}
           check-latest: true
-          cache: "npm"
 
       - name: "Install linters"
         run: npm install --global graphql-schema-linter prettier
