@@ -1,4 +1,4 @@
-name: GQLGen
+name: Subgraph
 
 on:
   workflow_call:
